@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="KarateSchool.master.cs" Inherits="KarateSchool.KarateSchool" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <header>
+        Karate School&nbsp;&nbsp;
+        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Member.aspx">Member</asp:HyperLink>
+&nbsp;
+        <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/Instructor.aspx">Instructor</asp:HyperLink>
+&nbsp;
+        <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/Administrator.aspx">Admin</asp:HyperLink>
+    </header>
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                <p>
+                    <br />
+                </p>
+                <p>
+                </p>
+                <p>
+                    <asp:Login ID="Login1" runat="server">
+                    </asp:Login>
+                </p>
+                <p>
+                </p>
+                <p>
+                </p>
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+    <footer>
+        Calvin Stepan, Ryan Gabler<br/>
+        Assignment 4; CSCI 213
+    </footer>
+</body>
+</html>
