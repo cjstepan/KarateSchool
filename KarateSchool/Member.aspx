@@ -3,6 +3,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <p>
+        Hello
+        <asp:LoginName ID="LoginName1" runat="server" />
         <br />
     </p>
     <p>
