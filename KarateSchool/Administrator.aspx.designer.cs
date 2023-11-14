@@ -15,22 +15,22 @@ namespace KarateSchool
     {
 
         /// <summary>
-        /// GridView1 control.
+        /// memberGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView1;
+        protected global::System.Web.UI.WebControls.GridView memberGridView;
 
         /// <summary>
-        /// GridView2 control.
+        /// instructorGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView2;
+        protected global::System.Web.UI.WebControls.GridView instructorGridView;
 
         /// <summary>
         /// instructor control.
@@ -49,6 +49,15 @@ namespace KarateSchool
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.SqlDataSource members;
+
+        /// <summary>
+        /// userIDtxt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox userIDtxt;
 
         /// <summary>
         /// Label1 control.
@@ -87,24 +96,6 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.TextBox lastNametxt;
 
         /// <summary>
-        /// Label3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
-
-        /// <summary>
-        /// dateJoinedtxt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox dateJoinedtxt;
-
-        /// <summary>
         /// Label4 control.
         /// </summary>
         /// <remarks>
@@ -121,15 +112,6 @@ namespace KarateSchool
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox memberPhonetxt;
-
-        /// <summary>
-        /// Label5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label5;
 
         /// <summary>
         /// memberEmailtxt control.

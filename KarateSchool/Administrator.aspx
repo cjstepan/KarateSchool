@@ -9,7 +9,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <p>
         Member Table</p>
-    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="Member_UserID" DataSourceID="members">
+    <asp:GridView ID="memberGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Member_UserID" DataSourceID="members">
         <Columns>
             <asp:BoundField DataField="Member_UserID" HeaderText="Member_UserID" ReadOnly="True" SortExpression="Member_UserID" />
             <asp:BoundField DataField="MemberFirstName" HeaderText="MemberFirstName" SortExpression="MemberFirstName" />
@@ -20,7 +20,7 @@
         </Columns>
     </asp:GridView>
         <p>
-            Instructor Table<asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" DataKeyNames="InstructorID" DataSourceID="instructor">
+            Instructor Table<asp:GridView ID="instructorGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="InstructorID" DataSourceID="instructor">
                 <Columns>
                     <asp:BoundField DataField="InstructorID" HeaderText="InstructorID" ReadOnly="True" SortExpression="InstructorID" />
                     <asp:BoundField DataField="InstructorFirstName" HeaderText="InstructorFirstName" SortExpression="InstructorFirstName" />
@@ -34,6 +34,10 @@
             <asp:SqlDataSource ID="members" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString %>" SelectCommand="SELECT * FROM [Member]"></asp:SqlDataSource>
         </p>
     <p>
+            Member/Instructor ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:TextBox ID="userIDtxt" runat="server" Width="220px">1</asp:TextBox>
+        </p>
+    <p>
         <asp:Label ID="Label1" runat="server">Member/Instructor First Name</asp:Label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="firstNametxt" runat="server" Width="220px">First</asp:TextBox>
@@ -42,11 +46,7 @@
         <asp:Label ID="Label2" runat="server" Text="Member/Instructor Last Name"></asp:Label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="lastNametxt" runat="server" Width="220px">Last</asp:TextBox>
-        </p>
-    <p>
-        <asp:Label ID="Label3" runat="server" Text="Date Joined"></asp:Label>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:TextBox ID="dateJoinedtxt" runat="server" Width="220px">MM/DD/YYYY  12:00:00 PM</asp:TextBox>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </p>
     <p>
         <asp:Label ID="Label4" runat="server" Text="Member/Instructor Phone"></asp:Label>
@@ -54,28 +54,29 @@
         <asp:TextBox ID="memberPhonetxt" runat="server" Width="220px">111-222-3333</asp:TextBox>
         </p>
     <p>
-        <asp:Label ID="Label5" runat="server" Text="Member Email"></asp:Label>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Email (Member Only)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="memberEmailtxt" runat="server" Width="220px">member@email.com</asp:TextBox>
         </p>
     <p>
-        <asp:Button ID="addMemberBtn" runat="server" Text="Add New Member" Width="500px" />
+        <asp:Button ID="addMemberBtn" runat="server" Text="Add New Member" Width="500px" OnClick="addMemberBtn_Click" />
         </p>
     <p>
-        <asp:Button ID="addInstructorBtn" runat="server" Text="Add New Instructor" Width="500px" />
+        <asp:Button ID="addInstructorBtn" runat="server" Text="Add New Instructor" Width="500px" OnClick="addInstructorBtn_Click" />
         </p>
     <p>
         MemberUserID&nbsp;&nbsp;
-        <asp:DropDownList ID="memberIDSelectDropDown" runat="server" DataSourceID="memberID" DataTextField="Member_UserID" DataValueField="Member_UserID">
-        </asp:DropDownList>
+<asp:DropDownList ID="memberIDSelectDropDown" runat="server" DataSourceID="memberID" DataTextField="Member_UserID" DataValueField="Member_UserID">
+    <asp:ListItem Value="">Select ID</asp:ListItem>
+</asp:DropDownList>
         <asp:SqlDataSource ID="memberID" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString %>" SelectCommand="SELECT [Member_UserID] FROM [Member]"></asp:SqlDataSource>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; InstructorID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:DropDownList ID="instructorIDSelectDropDown" runat="server" DataSourceID="instructors" DataTextField="InstructorID" DataValueField="InstructorID">
-        </asp:DropDownList>
+<asp:DropDownList ID="instructorIDSelectDropDown" runat="server" DataSourceID="instructors" DataTextField="InstructorID" DataValueField="InstructorID">
+    <asp:ListItem Value="">Select ID</asp:ListItem>
+</asp:DropDownList>
         <asp:SqlDataSource ID="instructors" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString %>" SelectCommand="SELECT [InstructorID] FROM [Instructor]"></asp:SqlDataSource>
         </p>
-    <asp:Button ID="delMemberBtn" runat="server" Text="Delete Selected Member" Width="250px" />
-    <asp:Button ID="delInstructorBtn" runat="server" Text="Delete Selected Instructor" Width="250px" />
+    <asp:Button ID="delMemberBtn" runat="server" Text="Delete Selected Member" Width="250px" OnClick="delMemberBtn_Click" />
+    <asp:Button ID="delInstructorBtn" runat="server" Text="Delete Selected Instructor" Width="250px" OnClick="delInstructorBtn_Click" />
     <br />
     <p>
         Select Member section&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:DropDownList ID="sectionDropDown" runat="server" CssClass="auto-style1" DataSourceID="sectionID" DataTextField="SectionName" DataValueField="SectionName" Height="16px" Width="220px">
