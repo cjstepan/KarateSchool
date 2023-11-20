@@ -124,3 +124,11 @@ C:\Users\ostudent.CS\Desktop\KarateSchool\KarateSchool\bin\WebGrease.dll
 C:\Users\ostudent.CS\Desktop\KarateSchool\KarateSchool\bin\Antlr3.Runtime.pdb
 C:\Users\ostudent.CS\Desktop\KarateSchool\KarateSchool\bin\Newtonsoft.Json.xml
 C:\Users\ostudent.CS\Desktop\KarateSchool\KarateSchool\bin\System.Web.Optimization.xml
+D:\Github\KarateSchool\KarateSchool\bin\Antlr3.Runtime.dll
+D:\Github\KarateSchool\KarateSchool\bin\Microsoft.Web.Infrastructure.dll
+D:\Github\KarateSchool\KarateSchool\bin\Newtonsoft.Json.dll
+D:\Github\KarateSchool\KarateSchool\bin\System.Web.Optimization.dll
+D:\Github\KarateSchool\KarateSchool\bin\WebGrease.dll
+D:\Github\KarateSchool\KarateSchool\bin\Antlr3.Runtime.pdb
+D:\Github\KarateSchool\KarateSchool\bin\Newtonsoft.Json.xml
+D:\Github\KarateSchool\KarateSchool\bin\System.Web.Optimization.xml

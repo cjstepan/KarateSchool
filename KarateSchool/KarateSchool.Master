@@ -14,11 +14,11 @@
     <form id="form1" runat="server">
     <header>
         Karate School&nbsp;&nbsp;
-        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Member.aspx">Member</asp:HyperLink>
+        <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/MemberInfo/Member.aspx">Member</asp:HyperLink>
 &nbsp;
-        <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/Instructor.aspx">Instructor</asp:HyperLink>
+        <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/InstructorInfo/Instructor.aspx">Instructor</asp:HyperLink>
 &nbsp;
-        <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/Administrator.aspx">Admin</asp:HyperLink>
+        <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/AdministratorInfo/Administrator.aspx">Admin</asp:HyperLink>
     </header>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
