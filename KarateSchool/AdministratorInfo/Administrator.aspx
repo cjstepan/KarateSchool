@@ -15,38 +15,12 @@
     </p>
     <p>
         Member Table</p>
-    <asp:GridView ID="memberGridView" runat="server" AutoGenerateColumns="False" BackColor="#DEBA84" BorderColor="#DEBA84" BorderStyle="None" BorderWidth="1px" CellPadding="3" CellSpacing="2">
-        <FooterStyle BackColor="#F7DFB5" ForeColor="#8C4510" />
-        <HeaderStyle BackColor="#A55129" Font-Bold="True" ForeColor="White" />
-        <PagerStyle ForeColor="#8C4510" HorizontalAlign="Center" />
-        <RowStyle BackColor="#FFF7E7" ForeColor="#8C4510" />
-        <SelectedRowStyle BackColor="#738A9C" Font-Bold="True" ForeColor="White" />
-        <SortedAscendingCellStyle BackColor="#FFF1D4" />
-        <SortedAscendingHeaderStyle BackColor="#B95C30" />
-        <SortedDescendingCellStyle BackColor="#F1E5CE" />
-        <SortedDescendingHeaderStyle BackColor="#93451F" />
+    <asp:GridView ID="MemberGridView" runat="server">
     </asp:GridView>
         <p>
-            Instructor Table<asp:GridView ID="instructorGridView" runat="server" AutoGenerateColumns="False" BackColor="#DEBA84" BorderColor="#DEBA84" BorderStyle="None" BorderWidth="1px" CellPadding="3" CellSpacing="2">
-                <FooterStyle BackColor="#F7DFB5" ForeColor="#8C4510" />
-                <HeaderStyle BackColor="#A55129" Font-Bold="True" ForeColor="White" />
-                <PagerStyle ForeColor="#8C4510" HorizontalAlign="Center" />
-                <RowStyle BackColor="#FFF7E7" ForeColor="#8C4510" />
-                <SelectedRowStyle BackColor="#738A9C" Font-Bold="True" ForeColor="White" />
-                <SortedAscendingCellStyle BackColor="#FFF1D4" />
-                <SortedAscendingHeaderStyle BackColor="#B95C30" />
-                <SortedDescendingCellStyle BackColor="#F1E5CE" />
-                <SortedDescendingHeaderStyle BackColor="#93451F" />
-            </asp:GridView>
-            <asp:SqlDataSource ID="instructor" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString %>" SelectCommand="SELECT * FROM [Instructor]"></asp:SqlDataSource>
-        </p>
-    <p>
-            <asp:SqlDataSource ID="members" runat="server" ConnectionString="<%$ ConnectionStrings:KarateSchoolConnectionString %>" SelectCommand="SELECT * FROM [Member]"></asp:SqlDataSource>
-        </p>
-    <p>
-            Member/Instructor ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:TextBox ID="userIDtxt" runat="server" Width="220px">1</asp:TextBox>
-        </p>
+            Instructor Table</p>
+    <asp:GridView ID="InstructorGridView" runat="server">
+    </asp:GridView>
     <p>
         <asp:Label ID="Label1" runat="server">Member/Instructor First Name</asp:Label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -66,6 +40,10 @@
     <p>
         Email (Member Only)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <asp:TextBox ID="memberEmailtxt" runat="server" Width="220px">member@email.com</asp:TextBox>
+        </p>
+    <p>
+        Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <asp:TextBox ID="passwordTxtBox" runat="server" Width="219px">**********</asp:TextBox>
         </p>
     <p>
         <asp:Button ID="addMemberBtn" runat="server" Text="Add New Member" Width="177px" OnClick="addMemberBtn_Click" />

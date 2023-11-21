@@ -24,49 +24,22 @@ namespace KarateSchool
         protected global::System.Web.UI.WebControls.LoginStatus LoginStatus1;
 
         /// <summary>
-        /// memberGridView control.
+        /// MemberGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView memberGridView;
+        protected global::System.Web.UI.WebControls.GridView MemberGridView;
 
         /// <summary>
-        /// instructorGridView control.
+        /// InstructorGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView instructorGridView;
-
-        /// <summary>
-        /// instructor control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource instructor;
-
-        /// <summary>
-        /// members control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource members;
-
-        /// <summary>
-        /// userIDtxt control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox userIDtxt;
+        protected global::System.Web.UI.WebControls.GridView InstructorGridView;
 
         /// <summary>
         /// Label1 control.
@@ -130,6 +103,15 @@ namespace KarateSchool
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox memberEmailtxt;
+
+        /// <summary>
+        /// passwordTxtBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox passwordTxtBox;
 
         /// <summary>
         /// addMemberBtn control.
