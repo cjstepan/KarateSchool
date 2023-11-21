@@ -190,25 +190,50 @@ namespace KarateSchool
 
         protected void delMemberBtn_Click(object sender, EventArgs e)
         {
-            //if memberID is selected in the dropdown delete the coorisponding record in the member table
             if (memberIDSelectDropDown.SelectedValue != null)
             {
-                //assign dropdown selection to a int variable
                 int selectedMemberID = Convert.ToInt32(memberIDSelectDropDown.SelectedValue);
 
-                using (dbcon = new KarateSchoolDataContext(connString))
+                try
                 {
-                    // Retrieve the selected record from the database
-                    var selectedRecord = dbcon.Members.SingleOrDefault(m => m.Member_UserID == selectedMemberID);
-
-                    if (selectedRecord != null)
+                    using (dbcon = new KarateSchoolDataContext(connString))
                     {
-                        //update member gridview and dropdown
-                        dbcon.Members.DeleteOnSubmit(selectedRecord);
-                        dbcon.SubmitChanges();
-                        MemberGridView.DataBind();
-                        memberIDSelectDropDown.DataBind();
+                        var selectedMember = dbcon.Members.SingleOrDefault(m => m.Member_UserID == selectedMemberID);
+
+                        if (selectedMember != null)
+                        {
+                            // Retrieve related records from the Section table
+                            var sectionsToDelete = dbcon.Sections.Where(s => s.Member_ID == selectedMemberID);
+
+                            // Retrieve the associated user record from the NetUser table
+                            var userToDelete = dbcon.NetUsers.SingleOrDefault(u => u.UserID == selectedMemberID);
+
+                            // Delete related records from the Section table
+                            dbcon.Sections.DeleteAllOnSubmit(sectionsToDelete);
+
+                            // Delete the member record
+                            dbcon.Members.DeleteOnSubmit(selectedMember);
+
+                            // Delete the user record from the NetUser table
+                            if (userToDelete != null)
+                            {
+                                dbcon.NetUsers.DeleteOnSubmit(userToDelete);
+                            }
+
+                            // Submit changes
+                            dbcon.SubmitChanges();
+
+                            // Refresh UI components
+                            MemberGridView.DataBind();
+                            memberIDSelectDropDown.DataBind();
+                            refreshGridViews();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (e.g., log it or show an error message to the user)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
                 }
             }
             else
@@ -217,32 +242,123 @@ namespace KarateSchool
             }
         }
 
+
         protected void delInstructorBtn_Click(object sender, EventArgs e)
         {
-            //if instructorID is selected in the dropdown delete the coorisponding record in the instructor table
+            // Check if an instructorID is selected in the dropdown
             if (instructorIDSelectDropDown.SelectedValue != null)
             {
-                //assign dropdown selection to a int variable
+                // Assign dropdown selection to an int variable
                 int selectedInstructorID = Convert.ToInt32(instructorIDSelectDropDown.SelectedValue);
 
-                using (dbcon = new KarateSchoolDataContext(connString))
+                try
                 {
-                    // Retrieve the selected record from the database
-                    var selectedRecord = dbcon.Instructors.SingleOrDefault(i => i.InstructorID == selectedInstructorID);
-
-                    if (selectedRecord != null)
+                    using (dbcon = new KarateSchoolDataContext(connString))
                     {
-                        dbcon.Instructors.DeleteOnSubmit(selectedRecord);
-                        dbcon.SubmitChanges();
-                        //update instructor gridview and dropdown 
-                        InstructorGridView.DataBind();
-                        instructorIDSelectDropDown.DataBind();
+                        // Retrieve the selected record from the database
+                        var selectedInstructor = dbcon.Instructors.SingleOrDefault(i => i.InstructorID == selectedInstructorID);
+
+                        if (selectedInstructor != null)
+                        {
+                            // Delete the selected instructor record from the database
+                            dbcon.Instructors.DeleteOnSubmit(selectedInstructor);
+
+                            // Also delete the corresponding NetUser record
+                            var userToDelete = dbcon.NetUsers.SingleOrDefault(u => u.UserID == selectedInstructorID);
+                            if (userToDelete != null)
+                            {
+                                dbcon.NetUsers.DeleteOnSubmit(userToDelete);
+                            }
+
+                            // Submit changes to the database
+                            dbcon.SubmitChanges();
+
+                            // Update instructor gridview and dropdown 
+                            InstructorGridView.DataBind();
+                            instructorIDSelectDropDown.DataBind();
+                            refreshGridViews();
+                        }
+                        else
+                        {
+                            ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Instructor not found.');", true);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions, e.g., display an error message
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
                 }
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a instructor to delete.');", true);
+                // No instructor selected
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select an instructor to delete.');", true);
+            }
+        }
+
+        protected void addMemberToSectionBtn_Click(object sender, EventArgs e)
+        {
+            // Check if both member and section are selected
+            if (!string.IsNullOrEmpty(memberIDSelectDropDown.SelectedValue) && !string.IsNullOrEmpty(sectionDropDown.SelectedValue))
+            {
+                try
+                {
+                    int selectedMemberID = Convert.ToInt32(memberIDSelectDropDown.SelectedValue);
+                    int selectedInstructorID = Convert.ToInt32(instructorIDSelectDropDown.SelectedValue);
+
+                    using (dbcon = new KarateSchoolDataContext(connString))
+                    {
+                        // Check if the member and section exist
+                        var member = dbcon.Members.SingleOrDefault(m => m.Member_UserID == selectedMemberID);
+                        var instructor = dbcon.Instructors.SingleOrDefault(i => i.InstructorID == selectedInstructorID);
+
+                        if (member != null && instructor != null)
+                        {
+                            // Make sure the record doesn't already exist
+                            if (!dbcon.Sections.Any(s => s.Instructor_ID == selectedInstructorID && s.Member_ID == selectedMemberID && s.SectionName == sectionDropDown.SelectedValue))
+                            {
+                                int randFee = new Random().Next(300, 1300);
+                                // Create new Section object
+                                Section section = new Section
+                                {
+                                    SectionName = sectionDropDown.SelectedValue,
+                                    Instructor_ID = selectedInstructorID,
+                                    Member_ID = selectedMemberID,
+                                    SectionStartDate = DateTime.Now,
+                                    SectionFee = (decimal) randFee
+                                };
+
+                                dbcon.Sections.InsertOnSubmit(section);
+
+                                // Submit changes to the database
+                                dbcon.SubmitChanges();
+
+                                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Member added to section successfully.');", true);
+                            }
+                            else
+                            {
+                                // Member is already associated with the section
+                                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Member is already associated with the selected section.');", true);
+                            }
+                        }
+                        else
+                        {
+                            // Member or section not found
+                            ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Member or section not found.');", true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions, e.g., display an error message
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
+                }
+            }
+            else
+            {
+                // Member or section not selected
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select both a member and a section.');", true);
             }
         }
 
