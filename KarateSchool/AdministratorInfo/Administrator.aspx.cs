@@ -13,7 +13,66 @@ namespace KarateSchool
     public partial class Administrator : System.Web.UI.Page
     {
         KarateSchoolDataContext dbcon;
+        //string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\ryanm\\Desktop\\Cloned Repositories\\KarateSchool\\KarateSchool\\App_Data\\KarateSchool.mdf\";Integrated Security=True;Connect Timeout=30";
         string connString = ConfigurationManager.ConnectionStrings["KarateSchoolConnectionString"].ConnectionString;
+        protected void refreshGridViews()
+        {
+            dbcon = new KarateSchoolDataContext(connString);
+            try
+            {
+                var result = from member in dbcon.Members
+                             select new
+                             {
+                                 MemberFirstName = member.MemberFirstName,
+                                 MemberLastName = member.MemberLastName,
+                                 MemberPhoneNumber = member.MemberPhoneNumber,
+                                 MemberDateJoined = member.MemberDateJoined
+                             };
+
+                MemberGridView.DataSource = result;
+                MemberGridView.DataBind();
+
+                var instructorResult = from instructor in dbcon.Instructors
+                                       select new
+                                       {
+                                           InstructorFirstName = instructor.InstructorFirstName,
+                                           InstructorLastName = instructor.InstructorLastName
+                                       };
+                InstructorGridView.DataSource = instructorResult;
+                InstructorGridView.DataBind();
+            }
+
+            catch
+            {
+                Response.Redirect("~/Login.aspx");
+            }
+        }
+
+        protected int returnUserID()
+        {
+            using (var dbcon = new KarateSchoolDataContext(connString))
+            {
+                // Replace "desiredUserName" with the actual username you're searching for
+                string userName = (firstNametxt.Text + lastNametxt.Text).ToLower().Trim();
+
+                // LINQ query to get the UserID based on the UserName
+                var userIdQuery = from user in dbcon.NetUsers
+                                  where user.UserName == userName
+                                  select user.UserID;
+
+                // Execute the query and get the first result (or default if no matching user is found)
+                int userId = userIdQuery.FirstOrDefault();
+
+                // Now, 'userId' contains the UserID corresponding to the given UserName
+                Console.WriteLine($"UserID for UserName '{userName}': {userId}");
+
+                // Return the userID
+                return userId;
+            }
+        }
+
+       
+
         protected void Page_Load(object sender, EventArgs e)
         {
             dbcon = new KarateSchoolDataContext(connString);
@@ -30,98 +89,103 @@ namespace KarateSchool
                     Response.Redirect("~/Login.aspx", true);
                 }
             }
+            refreshGridViews();
 
-            //try catch ensures the page does not break if the LINQ queries do
-            try
-            {
-                var memberQuery = from member in dbcon.Members
-                                  select new
-                                  {
-                                      First_Name = member.MemberFirstName,
-                                      Last_Name = member.MemberLastName,
-                                      Phone_Number = member.MemberPhoneNumber,
-                                      Date_Joined = member.MemberDateJoined,
-                                  };
-                memberGridView.DataSource = memberQuery;
-                memberGridView.DataBind();
-
-                var instructorQuery = from instructor in dbcon.Instructors
-                                      select new
-                                      {
-                                          First_Name = instructor.InstructorFirstName,
-                                          LastName = instructor.InstructorLastName,
-                                      };
-                instructorGridView.DataSource = instructorQuery.ToList();
-                instructorGridView.DataBind();
-            }
-            catch
-            {
-                Response.Redirect("~/Login.aspx");
-            }
         }
 
         protected void addMemberBtn_Click(object sender, EventArgs e)
         {
-            //create new member ready for inserting into the Member table
-            Member newMember = new Member
+            using (dbcon = new KarateSchoolDataContext(connString))
             {
-                Member_UserID = int.Parse(userIDtxt.Text),
-                MemberFirstName = firstNametxt.Text,
-                MemberLastName = lastNametxt.Text,
-                MemberDateJoined = DateTime.Now,
-                MemberPhoneNumber = memberPhonetxt.Text,
-                MemberEmail = memberEmailtxt.Text,
-            };
-
-            //try adding the 'newMember' to the member table given the MemberID is unique and not already in use.
-            try
-            {
-                using (dbcon = new KarateSchoolDataContext(connString))
+                try
                 {
+                    string userName = (firstNametxt.Text + lastNametxt.Text).ToLower().Trim();
+                    string password = passwordTxtBox.Text;
+
+                    // Insert into NetUser table
+                    NetUser newMemberUser = new NetUser
+                    {
+                        UserName = userName,
+                        UserPassword = password,
+                        UserType = "Member"
+                    };
+                    
+                    dbcon.NetUsers.InsertOnSubmit(newMemberUser);
+                    dbcon.SubmitChanges();  // Commit the changes to get the generated identity value
+
+                    // Insert into Member table using the retrieved identity value
+                    Member newMember = new Member
+                    {
+                        Member_UserID = newMemberUser.UserID,
+                        MemberFirstName = firstNametxt.Text,
+                        MemberLastName = lastNametxt.Text,
+                        MemberDateJoined = DateTime.Now,
+                        MemberPhoneNumber = memberPhonetxt.Text,
+                        MemberEmail = memberEmailtxt.Text,
+                    };
                     dbcon.Members.InsertOnSubmit(newMember);
                     dbcon.SubmitChanges();
 
-                    //update member gridview and dropdown select
-                    memberGridView.DataBind();
+                    // Update member gridview and dropdown select
+                    MemberGridView.DataBind();
                     memberIDSelectDropDown.DataBind();
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error adding member: {ex.Message}");
+                    throw;
+                }
             }
-            //alert user of non-unique memberID
-            catch
-            { 
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a unique MemberID.');", true);
-            }
+            refreshGridViews();
         }
+
+
 
         protected void addInstructorBtn_Click(object sender, EventArgs e)
         {
-            //create new instructor ready for inserting into the Instructor table
-            Instructor newInstructor = new Instructor
-            {
-                InstructorID = int.Parse(userIDtxt.Text),
-                InstructorFirstName = firstNametxt.Text,
-                InstructorLastName = lastNametxt.Text,
-                InstructorPhoneNumber = memberPhonetxt.Text,
-            };
 
-            //try adding the 'newInstructor' to the Instructor table given the InstructorID is unique and not already in use.
-            try
+            using (dbcon = new KarateSchoolDataContext(connString))
             {
-                using (dbcon = new KarateSchoolDataContext(connString))
+                try
                 {
+                    string userName = (firstNametxt.Text + lastNametxt.Text).ToLower().Trim();
+                    string password = passwordTxtBox.Text;
+
+                    NetUser newMemberUser = new NetUser
+                    {
+                        UserName = userName,
+                        UserPassword = password,
+                        UserType = "Instructor"
+                    };
+                    dbcon.NetUsers.InsertOnSubmit(newMemberUser);
+                    dbcon.SubmitChanges();
+
+                    //create new instructor ready for inserting into the Instructor table
+                    Instructor newInstructor = new Instructor
+                    {
+                        InstructorID = newMemberUser.UserID,
+                        InstructorFirstName = firstNametxt.Text,
+                        InstructorLastName = lastNametxt.Text,
+                        InstructorPhoneNumber = memberPhonetxt.Text,
+                    };
+
                     dbcon.Instructors.InsertOnSubmit(newInstructor);
                     dbcon.SubmitChanges();
 
                     //update instructor gridview and dropdown select
-                    instructorGridView.DataBind();
+                    InstructorGridView.DataBind();
                     instructorIDSelectDropDown.DataBind();
+
+                }
+                //alert user of non-unique instructorID
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine($"Error adding member: {ex.Message}");
+                    throw;
                 }
             }
-            //alert user of non-unique instructorID
-            catch
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Please select a unique InstructorID.');", true);
-            }
+            refreshGridViews();
         }
 
         protected void delMemberBtn_Click(object sender, EventArgs e)
@@ -142,7 +206,7 @@ namespace KarateSchool
                         //update member gridview and dropdown
                         dbcon.Members.DeleteOnSubmit(selectedRecord);
                         dbcon.SubmitChanges();
-                        memberGridView.DataBind();
+                        MemberGridView.DataBind();
                         memberIDSelectDropDown.DataBind();
                     }
                 }
@@ -171,7 +235,7 @@ namespace KarateSchool
                         dbcon.Instructors.DeleteOnSubmit(selectedRecord);
                         dbcon.SubmitChanges();
                         //update instructor gridview and dropdown 
-                        instructorGridView.DataBind();
+                        InstructorGridView.DataBind();
                         instructorIDSelectDropDown.DataBind();
                     }
                 }
